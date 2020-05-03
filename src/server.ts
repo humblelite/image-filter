@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { filterImageFromURL, deleteLocalFiles } from "./util/util";
-import * as Joi from "@hapi/joi";
+import Joi from "@hapi/joi";
 
 (async () => {
   // Init the Express application
