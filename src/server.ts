@@ -37,7 +37,6 @@ import * as Joi from '@hapi/joi'
     try {
      url = await schema.validateAsync(imageUrl)
      filteredImage = await filterImageFromURL(url)
-     console.log(filteredImage)
      
     } catch (error) {
       return res.status(422).send(error.message || "error with your reqest, check your url")
