@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
+import * as Joi from '@hapi/joi'
 
 (async () => {
 
@@ -29,17 +30,23 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
   /**************************************************************************** */
   app.get("/filteredimage", async (req,res,next)=>{
-    const imageUrl:string = req.query.image_url
-    const filteredImage = await filterImageFromURL(imageUrl)
+    const schema = Joi.string().uri()
+    let imageUrl :string = req.query.image_url
+    let url: string;
+    let filteredImage: string;
+    try {
+     url = await schema.validateAsync(imageUrl)
+     filteredImage = await filterImageFromURL(url)
+     console.log(filteredImage)
+     
+    } catch (error) {
+      return res.status(422).send(error.message || "error with your reqest, check your url")
+    }
+    
+     
     res.on('finish',()=> deleteLocalFiles([filteredImage]))
-    res.sendFile(filteredImage,(err)=>{
-      if(err){
-        console.log(err)
-      }else{
-        console.log("sent")
-      }
-    })  
-  })
+    res.status(200).sendFile(filteredImage)
+  });
   //! END @TODO1
   
   // Root Endpoint
