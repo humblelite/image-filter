@@ -1,7 +1,7 @@
-import express from "express";
+import express,{Request, Response, query} from "express";
 import bodyParser from "body-parser";
 import { filterImageFromURL, deleteLocalFiles } from "./util/util";
-import Joi from "@hapi/joi";
+import Joi,{StringSchema} from "@hapi/joi";
 
 (async () => {
   // Init the Express application
@@ -28,9 +28,9 @@ import Joi from "@hapi/joi";
   //   the filtered image file [!!TIP res.sendFile(filteredpath); might be useful]
 
   /**************************************************************************** */
-  app.get("/filteredimage", async (req, res, next) => {
-    const schema = Joi.string().uri();
-    let imageUrl: string = req.query.image_url;
+  app.get("/filteredimage", async (req: Request, res: Response) => {
+    const schema: StringSchema = Joi.string().uri();
+    let imageUrl:any = req.query.image_url;
     let url: string;
     let filteredImage: string;
     try {
@@ -49,7 +49,7 @@ import Joi from "@hapi/joi";
 
   // Root Endpoint
   // Displays a simple message to the user
-  app.get("/", async (req, res) => {
+  app.get("/", async (req: Request, res: Response) => {
     res.send("try GET /filteredimage?image_url={{}}");
   });
 
